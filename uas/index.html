@@ -160,7 +160,6 @@
 
             if (error) {
                 console.error('Login error:', error.message);
-                // Pesan error yang lebih ramah pengguna
                 let errorMessage = 'Login gagal. Periksa kembali email dan password Anda.';
                 if (error.message.includes('invalid credentials')) {
                     errorMessage = 'Email atau password salah.';
