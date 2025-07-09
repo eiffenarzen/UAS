@@ -187,6 +187,7 @@
     <h3>🧑‍🎓 Informasi Peminjam</h3>
     <input type="text" id="namaLengkap" placeholder="Nama Lengkap" />
     <input type="text" id="nimMahasiswa" placeholder="NIM" />
+    <input type="text" id="kelasMahasiswa" placeholder="Kelas" />
     <button onclick="pinjamSemua()">📥 Pinjam Semua</button>
   </div>
 
@@ -265,8 +266,9 @@
     window.pinjamSemua = async () => {
       const nama = document.getElementById('namaLengkap').value.trim()
       const nim = document.getElementById('nimMahasiswa').value.trim()
+      const kelas = document.getElementById('kelasMahasiswa').value.trim()
 
-      if (!nama || !nim) return alert('Nama dan NIM wajib diisi.')
+      if (!nama || !nim || !kelas) return alert('Nama, NIM, dan Kelas wajib diisi.')
 
       const { data: daftarAlat } = await supabase.from('inventaris').select('*')
       if (!daftarAlat) {
@@ -284,6 +286,7 @@
             user_email: email,
             nama_siswa: nama,
             nim: nim,
+            kelas: kelas,
             alat_id: item.id,
             nama_alat: item.nama_alat,
             jumlah,
