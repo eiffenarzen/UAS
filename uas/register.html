@@ -126,15 +126,6 @@
             }
         }
     </style>
-
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script type="text/javascript">
-        // PENTING: Ganti "YOUR_EMAILJS_PUBLIC_KEY" dengan Public Key EmailJS Anda
-        // Anda bisa menemukannya di dashboard EmailJS > Account > API Keys
-        (function() {
-            emailjs.init("qVWfRDbsALU88eJzV");
-        })();
-    </script>
 </head>
 <body>
     <div class="box">
@@ -200,40 +191,16 @@
                     console.error('Terjadi kesalahan saat membuat profil:', profileCatchError.message);
                 }
 
+                alert('Pendaftaran berhasil! Silakan login dengan akun yang baru Anda daftarkan.');
 
-                // 3. Mengirim email selamat datang menggunakan EmailJS
-                try {
-                    // PENTING: Ganti dengan Service ID dan Template ID EmailJS Anda
-                    // Anda bisa menemukannya di dashboard EmailJS Anda
-                    const serviceID = 'service_kgvklmy'; // Contoh: 'service_abc123'
-                    const templateID = 'template_8qoo1h7'; // Contoh: 'template_xyz456'
-
-                    const templateParams = {
-                        to_email: email, // Variabel yang akan digunakan di template EmailJS
-                        // Jika Anda memiliki field nama di form register, bisa ditambahkan di sini
-                        // user_name: 'Nama Pengguna', 
-                    };
-
-                    // emailjs.send() akan memanggil EmailJS API
-                    // Public Key sudah diinisialisasi di <head>
-                    const response = await emailjs.send(serviceID, templateID, templateParams);
-                    
-                    console.log('Email dikirim via EmailJS:', response);
-                    alert('Pendaftaran berhasil! Email selamat datang telah dikirim ke ' + email + '. Silakan login dengan akun yang baru Anda daftarkan.');
-                    
-                } catch (emailJsError) {
-                    console.error('Gagal mengirim email via EmailJS:', emailJsError);
-                    alert('Pendaftaran berhasil, tetapi gagal mengirim email selamat datang. Silakan login dengan akun yang baru Anda daftarkan.');
-                }
-
-                // 4. Logout otomatis dari Supabase setelah pendaftaran (jika Supabase otomatis login)
+                // 3. Logout otomatis dari Supabase setelah pendaftaran (jika Supabase otomatis login)
                 // Ini memastikan pengguna harus login kembali di halaman login.
                 const { data: { session } } = await supabase.auth.getSession();
                 if (session) {
                     await supabase.auth.signOut();
                 }
                 
-                // 5. Arahkan ke halaman login
+                // 4. Arahkan ke halaman login
                 window.location.href = 'index.html'; 
             }
         });
