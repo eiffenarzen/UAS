@@ -126,6 +126,12 @@
             }
         }
     </style>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("OuqKQqx8uUXq_VNGi");
+        })();
+    </script>
 </head>
 <body>
     <div class="box">
@@ -191,7 +197,19 @@
                     console.error('Terjadi kesalahan saat membuat profil:', profileCatchError.message);
                 }
 
-                alert('Pendaftaran berhasil! Silakan login dengan akun yang baru Anda daftarkan.');
+                try {
+                    const serviceID = 'service_6mudcxv'; // Contoh: 'service_abc123'
+                    const templateID = 'template_ewbudvc'; // Contoh: 'template_xyz456'
+                    const templateParams = {
+                         to_email: email, // Variabel yang akan digunakan di template EmailJS
+                    };
+                    const response = await emailjs.send(serviceID, templateID, templateParams);
+                    console.log('Email dikirim via EmailJS:', response);
+                    alert('Pendaftaran berhasil! Email selamat datang telah dikirim ke ' + email + '. Silakan login dengan akun yang baru Anda daftarkan.');
+                } catch (emailJsError) {
+                    console.error('Gagal mengirim email via EmailJS:', emailJsError);
+                     alert('Pendaftaran berhasil, tetapi gagal mengirim email selamat datang. Silakan login dengan akun yang baru Anda daftarkan.');
+                 }
 
                 // 3. Logout otomatis dari Supabase setelah pendaftaran (jika Supabase otomatis login)
                 // Ini memastikan pengguna harus login kembali di halaman login.
