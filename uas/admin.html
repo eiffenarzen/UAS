@@ -259,7 +259,6 @@
   <script type="text/javascript">
       (function() {
           emailjs.init("qVWfRDbsALU88eJzV");
-          // emailjs.init("OuqKQqx8uUXq_VNGi");
       })();
   </script>
 </head>
@@ -442,7 +441,7 @@
     }
 
     async function loadPeminjaman() {
-      const { data, error } = await supabase.from('peminjaman').select('*, user_email, nama_siswa, nim').order('tanggal', { ascending: false })
+      const { data, error } = await supabase.from('peminjaman').select('*, user_email, nama_siswa, nim, kelas').order('tanggal', { ascending: false })
       if (error) {
           console.error('Error loading peminjaman:', error.message);
           alert('Gagal memuat data peminjaman: ' + error.message);
@@ -453,6 +452,7 @@
           <h4>${r.nama_alat}</h4>
           <p><strong>Nama:</strong> ${r.nama_siswa || '-'}</p>
           <p><strong>NIM:</strong> ${r.nim || '-'}</p>
+          <p><strong>Kelas:</strong> ${r.kelas || '-'}</p>
           <p><strong>Email:</strong> ${r.user_email}</p>
           <p><strong>Jumlah:</strong> ${r.jumlah}</p>
           <p><strong>Status:</strong> ${r.status}</p>
@@ -470,7 +470,7 @@
     window.approve = async (id, alat_id, jumlah) => {
       const { data: peminjamanRequest, error: fetchRequestError } = await supabase
         .from('peminjaman')
-        .select('user_email, nama_alat, nama_siswa, nim')
+        .select('user_email, nama_alat, nama_siswa, nim, kelas')
         .eq('id', id)
         .single();
 
@@ -483,6 +483,7 @@
       const namaAlat = peminjamanRequest.nama_alat;
       const namaSiswa = peminjamanRequest.nama_siswa;
       const nimSiswa = peminjamanRequest.nim;
+      const kelasSiswa = peminjamanRequest.kelas;
 
       const { data: alat, error: fetchAlatError } = await supabase
         .from('inventaris')
@@ -526,6 +527,7 @@
             to_email: userEmail,
             nama_siswa: namaSiswa,
             nim_siswa: nimSiswa,
+            kelas_siswa: kelasSiswa,
             nama_alat: namaAlat,
             jumlah_pinjam: jumlah,
             status_peminjaman: 'disetujui',
@@ -550,7 +552,7 @@
             // Ambil detail peminjaman sebelum memperbarui status
             const { data: peminjamanRequest, error: fetchRequestError } = await supabase
                 .from('peminjaman')
-                .select('user_email, nama_alat, nama_siswa, nim, jumlah')
+                .select('user_email, nama_alat, nama_siswa, nim, kelas, jumlah')
                 .eq('id', id)
                 .single();
 
@@ -559,7 +561,7 @@
                 return alert('Gagal mengambil detail peminjaman untuk penolakan: ' + fetchRequestError.message);
             }
 
-            const { user_email: userEmail, nama_alat: namaAlat, nama_siswa: namaSiswa, nim: nimSiswa, jumlah: jumlahPinjam } = peminjamanRequest;
+            const { user_email: userEmail, nama_alat: namaAlat, nama_siswa: namaSiswa, nim: nimSiswa, kelas: kelasSiswa, jumlah: jumlahPinjam } = peminjamanRequest;
 
             // Update status peminjaman menjadi ditolak
             const { error: updatePeminjamanError } = await supabase
@@ -576,18 +578,17 @@
 
             // Kirim email penolakan
             try {
-                const serviceID = 'service_6mudcxv'; // Ganti dengan Service ID EmailJS Anda
-                const templateID = 'template_ewbudvc'; // **PENTING: Ganti ini dengan Template ID EmailJS untuk PENOLAKAN**
+                const serviceID = 'service_kgvklmy';
+                const templateID = 'template_8qoo1h7';
 
                 const templateParams = {
                     to_email: userEmail,
                     nama_siswa: namaSiswa,
                     nim_siswa: nimSiswa,
+                    kelas_siswa: kelasSiswa,
                     nama_alat: namaAlat,
                     jumlah_pinjam: jumlahPinjam,
                     status_peminjaman: 'ditolak',
-                    // Anda bisa menambahkan alasan penolakan jika ada inputnya
-                    // alasan_penolakan: 'Stok tidak tersedia'
                 };
 
                 await emailjs.send(serviceID, templateID, templateParams);
