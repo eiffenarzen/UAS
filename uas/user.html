@@ -223,7 +223,7 @@
           <p>${item.keterangan}</p>
           <p><strong>Stok:</strong> ${item.stok}</p>
           ${item.stok > 0 ? `
-            <input type="number" min="0" max="${item.stok}" id="jumlah-${item.id}" placeholder="Jumlah (0-${item.stok})"/>
+            <input type="number" min="0" max="${item.stok}" id="jumlah-${item.id}" placeholder="Jumlah (1-${item.stok})"/>
           ` : `<p style="color:red;">Stok Habis</p>`}
         </div>
       `).join('')
