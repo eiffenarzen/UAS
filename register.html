@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Daftar Akun Baru</title>
+    <style>
+        :root {
+            /* Warna dari tema utama */
+            --dark-bg: #1A1A2E;
+            --dark-card: #2B2B47;
+            --text-light: #E0E0E0;
+            --input-bg: #3C3C5A;
+            --gradient-start: #0A66C2;
+            --gradient-end: #8E2DE2;
+            --button-hover: #673AB7;
+            --link-color: #00BFFF;
+            --shadow-color: rgba(0, 0, 0, 0.6);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Menggunakan min-height agar bisa discroll jika konten banyak */
+            margin: 0;
+            padding: 20px; /* Tambahkan padding agar tidak terlalu mepet tepi */
+            box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+        }
+
+        .box {
+            background: var(--dark-card);
+            padding: 35px; /* Padding lebih besar */
+            border-radius: 15px; /* Sudut lebih lembut */
+            width: 100%; /* Lebar responsif */
+            max-width: 400px; /* Batas lebar maksimum */
+            text-align: center;
+            box-shadow: 0 10px 30px var(--shadow-color); /* Bayangan lebih dalam */
+            animation: fadeIn 0.5s ease-out; /* Animasi masuk */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-weight: 700; /* Lebih tebal */
+            color: var(--gradient-start); /* Warna sesuai gradien */
+            margin-bottom: 25px; /* Jarak bawah lebih lega */
+            font-size: 1.8em;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: calc(100% - 24px); /* Sesuaikan dengan padding */
+            padding: 14px; /* Padding lebih besar */
+            margin-top: 15px; /* Jarak atas lebih besar */
+            background: var(--input-bg);
+            color: var(--text-light);
+            border: 1px solid rgba(224, 224, 224, 0.2); /* Border lebih lembut */
+            border-radius: 10px; /* Sudut lebih lembut */
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(224, 224, 224, 0.6);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--gradient-start);
+            box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px; /* Padding lebih besar */
+            margin-top: 25px; /* Jarak atas lebih besar */
+            border-radius: 10px;
+            border: none;
+            font-size: 17px; /* Ukuran font lebih besar */
+            font-weight: 600;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px); /* Efek lift lebih terasa */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(to right, var(--button-hover), var(--gradient-end));
+        }
+
+        a {
+            color: var(--link-color); /* Warna link konsisten */
+            text-decoration: none;
+            margin-top: 20px; /* Jarak atas lebih besar */
+            display: block;
+            font-size: 15px;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #008fcc; /* Sedikit lebih gelap saat hover */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .box {
+                padding: 25px;
+                margin: 0 15px; /* Margin samping untuk layar kecil */
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            input, button {
+                padding: 12px;
+                font-size: 15px;
+            }
+        }
+    </style>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("OuqKQqx8uUXq_VNGi");
+        })();
+    </script>
+</head>
+<body>
+    <div class="box">
+        <h2>Daftar Akun Baru</h2>
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <input type="password" id="confirmPassword" placeholder="Konfirmasi Password" required />
+        <button id="registerBtn">Daftar</button>
+        <a href="index.html">Sudah punya akun? Login di sini.</a>
+    </div>
+
+    <script type="module">
+        // Import Supabase Client
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+        // Inisialisasi Supabase Client
+        const supabase = createClient(
+            'https://vaasgcsledcnhvwjvqzt.supabase.co', // Ganti dengan URL Proyek Supabase Anda
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZhYXNnY3NsZWRjbmh2d2p2cXp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxMDgzMTAsImV4cCI6MjA2MjY4NDMxMH0.b_0KpgKKli-TCPQUEd5ClnW3pR7QCjIO-6ggi0woNJA' // Ganti dengan Public Anon Key Supabase Anda
+        );
+
+        document.getElementById('registerBtn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+            // Validasi Password
+            if (password !== confirmPassword) {
+                alert('Password dan konfirmasi password tidak cocok!');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Password minimal 6 karakter!');
+                return;
+            }
+
+            // 1. Mendaftar user baru di Supabase
+            // Karena 'Confirm email' di Supabase diatur 'OFF', user akan langsung aktif.
+            const { data: userData, error: signUpError } = await supabase.auth.signUp({
+                email: email,
+                password: password,
+            });
+
+            if (signUpError) {
+                alert('Pendaftaran gagal: ' + signUpError.message);
+                console.error('Supabase SignUp Error:', signUpError);
+                return;
+            }
+
+            if (userData && userData.user) {
+                // 2. Jika pendaftaran Supabase berhasil, tambahkan entri ke tabel profiles
+                try {
+                    const { error: profileError } = await supabase.from('profiles').insert([
+                        { id: userData.user.id, nama_lengkap: null, nim: null } 
+                    ]);
+
+                    if (profileError) {
+                        console.error('Gagal membuat profil di Supabase:', profileError.message);
+                        // Lanjutkan saja, karena akun utama sudah terbentuk
+                    }
+                } catch (profileCatchError) {
+                    console.error('Terjadi kesalahan saat membuat profil:', profileCatchError.message);
+                }
+
+                try {
+                    const serviceID = 'service_6mudcxv'; // Contoh: 'service_abc123'
+                    const templateID = 'template_ewbudvc'; // Contoh: 'template_xyz456'
+                    const templateParams = {
+                         to_email: email, // Variabel yang akan digunakan di template EmailJS
+                    };
+                    const response = await emailjs.send(serviceID, templateID, templateParams);
+                    console.log('Email dikirim via EmailJS:', response);
+                    alert('Pendaftaran berhasil! Email selamat datang telah dikirim ke ' + email + '. Silakan login dengan akun yang baru Anda daftarkan.');
+                } catch (emailJsError) {
+                    console.error('Gagal mengirim email via EmailJS:', emailJsError);
+                     alert('Pendaftaran berhasil, tetapi gagal mengirim email selamat datang. Silakan login dengan akun yang baru Anda daftarkan.');
+                 }
+
+                // 3. Logout otomatis dari Supabase setelah pendaftaran (jika Supabase otomatis login)
+                // Ini memastikan pengguna harus login kembali di halaman login.
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    await supabase.auth.signOut();
+                }
+                
+                // 4. Arahkan ke halaman login
+                window.location.href = 'index.html'; 
+            }
+        });
+    </script>
+</body>
+</html>
