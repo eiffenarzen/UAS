@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inventaris - Siswa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
+  <style>
+        :root {
+            /* Warna dari index.html */
+            --dark-bg: #1A1A2E;
+            --dark-card: #2B2B47;
+            --text-light: #E0E0E0;
+            --input-bg: #3C3C5A;
+            --gradient-start: #0A66C2;
+            --gradient-end: #8E2DE2;
+            --button-hover: #673AB7;
+            --link-color: #00BFFF;
+            --shadow-color: rgba(0, 0, 0, 0.6);
+            --button-kembalikan: #007bff;
+            --button-logout: crimson;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        h2, h3 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+            color: var(--text-light);
+            letter-spacing: 1px;
+        }
+
+        h3 {
+            margin-top: 40px;
+            font-size: 1.5em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px; /* Jarak antar card lebih besar */
+            max-width: 1200px;
+            margin: 0 auto; /* Tengah */
+            padding-bottom: 30px; /* Ruang di bawah grid */
+        }
+
+        .card {
+            background: var(--dark-card);
+            border-radius: 12px; /* Sudut lebih lembut */
+            padding: 20px; /* Padding lebih besar */
+            box-shadow: 0 6px 20px var(--shadow-color); /* Bayangan lebih dalam */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px); /* Efek lift on hover */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .card h4 {
+            margin-top: 0;
+            color: var(--gradient-start); /* Warna judul card */
+            font-weight: 600;
+        }
+
+        .card p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: rgba(224, 224, 224, 0.9);
+        }
+
+        .card p strong {
+            color: var(--text-light);
+        }
+
+        input {
+            width: calc(100% - 24px); /* Sesuaikan dengan padding */
+            padding: 12px;
+            margin: 10px 0; /* Margin lebih besar */
+            background: var(--input-bg);
+            color: var(--text-light);
+            border: 1px solid rgba(224, 224, 224, 0.2); /* Border lebih lembut */
+            border-radius: 8px; /* Sudut lebih lembut */
+            font-size: 15px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(224, 224, 224, 0.6);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--gradient-start);
+            box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px; /* Margin lebih besar */
+            border-radius: 10px; /* Sudut lebih lembut */
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(to right, var(--button-hover), var(--gradient-end));
+        }
+
+        .kembalikan-btn {
+            background: var(--button-kembalikan);
+            margin-top: 15px;
+        }
+
+        .kembalikan-btn:hover {
+            background: #0056b3; /* Darker blue on hover */
+        }
+
+        .logout {
+            background: var(--button-logout);
+            margin-top: 50px;
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        .logout:hover {
+            background: #a80020;
+        }
+
+        .form-global {
+            max-width: 500px;
+            margin: 30px auto;
+            background: var(--dark-card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-color);
+        }
+
+        img {
+            width: 100%;
+            height: 180px; /* Tinggi gambar lebih besar */
+            object-fit: cover;
+            border-radius: 10px; /* Sudut gambar lebih lembut */
+            margin-bottom: 15px; /* Margin lebih besar */
+        }
+
+        /* Status colors */
+        .status-menunggu { color: #ffc107; } /* Kuning */
+        .status-disetujui { color: #28a745; } /* Hijau */
+        .status-ditolak { color: #dc3545; } /* Merah */
+        .status-dikembalikan { color: #007bff; } /* Biru */
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+                max-width: 90%;
+            }
+            .form-global {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+  <h2>📦 Inventaris Praktik Siswa</h2>
+
+  <div class="card form-global">
+    <h3>🧑‍🎓 Informasi Peminjam</h3>
+    <input type="text" id="namaLengkap" placeholder="Nama Lengkap" />
+    <input type="text" id="nimMahasiswa" placeholder="NIM" />
+    <input type="text" id="kelasMahasiswa" placeholder="Kelas" />
+    <button onclick="pinjamSemua()">📥 Pinjam Semua</button>
+  </div>
+
+  <div id="alatList" class="grid"></div>
+
+  <h3>🕒 Riwayat Peminjaman</h3>
+  <div id="riwayatList" class="grid"></div>
+
+  <button class="logout" id="logoutBtn">Logout</button>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabase = createClient(
+      'https://vaasgcsledcnhvwjvqzt.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZhYXNnY3NsZWRjbmh2d2p2cXp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxMDgzMTAsImV4cCI6MjA2MjY4NDMxMH0.b_0KpgKKli-TCPQUEd5ClnW3pR7QCjIO-6ggi0woNJA'
+    )
+
+    const alatList = document.getElementById('alatList')
+    const riwayatList = document.getElementById('riwayatList')
+    const logoutBtn = document.getElementById('logoutBtn')
+
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) window.location.href = 'index.html'
+    const email = user.email
+
+    // Tampilkan daftar alat
+    async function loadAlat() {
+      const { data } = await supabase.from('inventaris').select('*')
+      alatList.innerHTML = data.map(item => `
+        <div class="card">
+          <h4>${item.nama_alat}</h4>
+          ${item.gambar_url ? `<img src="${item.gambar_url}" style="width:100%; border-radius:8px; margin-bottom:10px;">` : ''}
+          <p>${item.keterangan}</p>
+          <p><strong>Stok:</strong> ${item.stok}</p>
+          ${item.stok > 0 ? `
+            <input type="number" min="0" max="${item.stok}" id="jumlah-${item.id}" placeholder="Jumlah (1-${item.stok})"/>
+          ` : `<p style="color:red;">Stok Habis</p>`}
+        </div>
+      `).join('')
+    }
+
+    // Tampilkan riwayat
+    async function loadRiwayat() {
+      const { data } = await supabase
+        .from('peminjaman')
+        .select('*')
+        .eq('user_email', email)
+        .order('tanggal', { ascending: false })
+
+      riwayatList.innerHTML = data.map(r => `
+        <div class="card">
+          <h4>${r.nama_alat}</h4>
+          <p><strong>Status:</strong> ${r.status}</p>
+          <p><strong>Jumlah:</strong> ${r.jumlah}</p>
+          <p><strong>Tanggal:</strong> ${new Date(r.tanggal).toLocaleString()}</p>
+          ${r.status === 'disetujui' ? `<button onclick="kembalikan(${r.id}, ${r.alat_id}, ${r.jumlah})">Kembalikan</button>` : ''}
+        </div>
+      `).join('')
+    }
+
+    window.kembalikan = async (id, alat_id, jumlah) => {
+      // Ubah status peminjaman jadi dikembalikan
+      await supabase.from('peminjaman').update({ status: 'dikembalikan' }).eq('id', id)
+        
+      // Tambah stok alat kembali
+      const { data} = await supabase.from('inventaris').select('stok').eq('id', alat_id).single()
+      await supabase.from('inventaris').update({ stok: data.stok + jumlah }).eq('id', alat_id)
+        
+      alert('Barang telah dikembalikan!')
+      loadAlat()
+      loadRiwayat()
+    }
+
+    // Pinjam semua alat
+    window.pinjamSemua = async () => {
+      const nama = document.getElementById('namaLengkap').value.trim()
+      const nim = document.getElementById('nimMahasiswa').value.trim()
+      const kelas = document.getElementById('kelasMahasiswa').value.trim()
+
+      if (!nama || !nim || !kelas) return alert('Nama, NIM, dan Kelas wajib diisi.')
+
+      const { data: daftarAlat } = await supabase.from('inventaris').select('*')
+      if (!daftarAlat) {
+      alert('Gagal memuat daftar alat.');
+      return;
+      }
+      const itemsToPinjam = []
+      let hasInvalidQuantity = false;
+
+      daftarAlat.forEach(item => {
+        const jumlahInput = document.getElementById(`jumlah-${item.id}`)
+        const jumlah = jumlahInput ? parseInt(jumlahInput.value) : 0
+        if (jumlah > 0 && jumlah <= item.stok) {
+          itemsToPinjam.push({
+            user_email: email,
+            nama_siswa: nama,
+            nim: nim,
+            kelas: kelas,
+            alat_id: item.id,
+            nama_alat: item.nama_alat,
+            jumlah,
+            status: 'menunggu',
+            tanggal: new Date()
+          })
+        }
+        else if (jumlah > item.stok) {
+          hasInvalidQuantity = true;
+        }
+      })
+
+      if (hasInvalidQuantity) {
+        return alert('Jumlah pinjam melebihi stok yang tersedia untuk beberapa alat. Mohon periksa kembali input Anda.');
+      }
+
+      if (itemsToPinjam.length === 0) {
+        return alert('Tidak ada alat yang dipilih untuk dipinjam atau jumlah yang dimasukkan tidak valid.');
+      }
+
+      const { error } = await supabase.from('peminjaman').insert(itemsToPinjam)
+      if (error) return alert('Gagal meminjam.')
+
+      alert('Berhasil mengajukan peminjaman. Menunggu persetujuan admin.')
+      loadAlat()
+      loadRiwayat()
+    }
+
+    logoutBtn.addEventListener('click', async () => {
+      await supabase.auth.signOut()
+      window.location.href = 'index.html'
+    })
+
+    // Init
+    loadAlat()
+    loadRiwayat()
+  </script>
+</body>
+</html>
