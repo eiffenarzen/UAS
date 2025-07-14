@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login Inventaris</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-bg: #1A1A2E;
+            --dark-card: #2B2B47;
+            --text-light: #E0E0E0;
+            --input-bg: #3C3C5A;
+            --gradient-start: #0A66C2;
+            --gradient-end: #8E2DE2;
+            --button-hover: #673AB7; /* Slightly darker purple for hover */
+            --link-color: #00BFFF; /* Deep Sky Blue for links */
+            --shadow-color: rgba(0, 0, 0, 0.6);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg); /* Darker, richer background */
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbar from background animation */
+            position: relative; /* For pseudo-elements */
+        }
+
+        /* Background animated circles/blobs */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 10% 20%, rgba(255, 0, 128, 0.1) 0%, rgba(255, 0, 128, 0.05) 50%, transparent 70%),
+                        radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.05) 50%, transparent 70%);
+            animation: moveGradient 20s ease infinite alternate;
+            z-index: -1; /* Behind the content */
+        }
+
+        @keyframes moveGradient {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-20%, -20%); }
+        }
+
+        .box {
+            background: var(--dark-card);
+            padding: 40px; /* More padding */
+            border-radius: 16px; /* Softer corners */
+            width: 320px; /* Slightly wider */
+            box-shadow: 0 10px 30px var(--shadow-color); /* Deeper shadow */
+            text-align: center;
+            animation: fadeIn 1s ease-out; /* Fade-in animation */
+            position: relative; /* For z-index to be above background */
+            z-index: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            margin-bottom: 25px; /* More space below title */
+            font-weight: 600; /* Slightly bolder */
+            color: var(--text-light);
+            letter-spacing: 1px; /* Subtle spacing */
+        }
+
+        input {
+            width: calc(100% - 24px); /* Account for padding */
+            padding: 12px;
+            margin-top: 15px; /* More space between inputs */
+            border-radius: 10px; /* Softer input corners */
+            border: 1px solid var(--input-bg); /* Subtle border */
+            background: var(--input-bg);
+            color: var(--text-light);
+            font-size: 15px; /* Slightly larger font */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+        }
+
+        input::placeholder {
+            color: rgba(224, 224, 224, 0.6); /* Lighter placeholder */
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--gradient-start); /* Highlight on focus */
+            box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.3); /* Soft glow */
+        }
+
+        button {
+            width: 100%;
+            padding: 14px; /* Taller button */
+            margin-top: 25px; /* More space above button */
+            border-radius: 10px; /* Softer button corners */
+            border: none;
+            font-size: 16px; /* Larger font */
+            font-weight: 600; /* Bolder text */
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease; /* Smooth hover effects */
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px); /* Lift effect */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Deeper shadow on hover */
+            background: linear-gradient(to right, var(--button-hover), var(--gradient-end)); /* Slight color change */
+        }
+
+        a {
+            display: block; /* Make link a block element for margin */
+            margin-top: 20px; /* Space above link */
+            color: var(--link-color); /* Distinct link color */
+            text-decoration: none; /* No underline by default */
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--gradient-end); /* Change color on hover */
+            text-decoration: underline; /* Underline on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Selamat Datang</h2>
+        <p style="font-size: 14px; margin-top: -15px; margin-bottom: 20px; color: rgba(224, 224, 224, 0.8);">Silakan masuk untuk melanjutkan.</p>
+        <input type="email" id="email" placeholder="Email Anda" required />
+        <input type="password" id="password" placeholder="Password Anda" required />
+        <button id="loginBtn">Login</button>
+        <a href="register.html">Belum punya akun? Daftar di sini.</a>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        const supabase = createClient('https://vaasgcsledcnhvwjvqzt.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZhYXNnY3NsZWRjbmh2d2p2cXp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxMDgzMTAsImV4cCI6MjA2MjY4NDMxMH0.b_0KpgKKli-TCPQUEd5ClnW3pR7QCjIO-6ggi0woNJA')
+        const ADMIN_EMAIL = 'admin@example.com' // Pastikan ini email admin yang benar
+
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value.trim()
+            const password = document.getElementById('password').value.trim()
+
+            if (!email || !password) {
+                alert('Email dan Password tidak boleh kosong.');
+                return;
+            }
+
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+
+            if (error) {
+                console.error('Login error:', error.message);
+                let errorMessage = 'Login gagal. Periksa kembali email dan password Anda.';
+                if (error.message.includes('invalid credentials')) {
+                    errorMessage = 'Email atau password salah.';
+                } else if (error.message.includes('Email not confirmed')) {
+                    errorMessage = 'Email Anda belum dikonfirmasi. Silakan cek inbox Anda.';
+                }
+                alert(errorMessage);
+                return;
+            }
+
+            // Arahkan ke halaman yang sesuai setelah login berhasil
+            if (email === ADMIN_EMAIL) {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'user.html'; // Diasumsikan halaman user.html Anda sekarang adalah siswa.html
+            }
+        })
+    </script>
+</body>
+</html>
